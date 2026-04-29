@@ -41,6 +41,11 @@
             this.numericUpDownRow.Name = "numericUpDownRow";
             this.numericUpDownRow.Size = new System.Drawing.Size(120, 20);
             this.numericUpDownRow.TabIndex = 0;
+            this.numericUpDownRow.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.numericUpDownRow.ValueChanged += new System.EventHandler(this.numericUpDownRow_ValueChanged);
             // 
             // numericUpDownWin
