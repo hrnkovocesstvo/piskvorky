@@ -50,6 +50,7 @@ namespace piskvorky
         }
         private void buttonStart_Click(object sender, EventArgs e)
         {
+
             Delej((int)numericUpDownRow.Value, (int)numericUpDownRow.Value);
             Console.WriteLine("done");
         }
