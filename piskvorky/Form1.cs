@@ -19,34 +19,39 @@ namespace piskvorky
         private void Form1_Load(object sender, EventArgs e)
         {
 
-
         }
     
     
 
         private void Delej(int x_tar, int y_tar)
         {
-            int width = 20;
-            int height = 20;
-            int left = 30;
+            int width = 50;
+            int height = width;
+            int startx = 50;
+            int starty = 50;
             Button[,] buttonArray = new Button[x_tar,y_tar];
-            for (int x = 0; x < x_tar-1; x++)
+            for (int x = 0; x < x_tar; x++)
             {
-                for (int y = 0; y < y_tar-1; y++)
+                for (int y = 0; y < y_tar; y++)
                 {
                     buttonArray[x,y] = new Button();
-                    buttonArray[x, y].Name = $"btn_{x}_{y}";
+                    buttonArray[x,y].Name = $"btn_{x}_{y}";
                     buttonArray[x,y].Size = new Size(width, height); 
-                    buttonArray[x,y].Location = new Point(20, 20);
+                    buttonArray[x,y].Location = new Point(startx+(width*x), starty +(height* y));
                     buttonArray[x,y].Click += new System.EventHandler(button_Click); this.Controls.Add(buttonArray[x,y]);
-                    left += 56;
                 }
             }
         }
 
+        public string player = "X";
+        public void turn() { if (player == "X") player = "O";else if (player == "O") player = "X"; }
+
         private void button_Click(object sender, EventArgs e)
         {
-
+            Button btn = sender as Button;
+            btn.Text = player;
+            turn();
+            
         }
         private void buttonStart_Click(object sender, EventArgs e)
         {
@@ -55,6 +60,9 @@ namespace piskvorky
             Console.WriteLine("done");
         }
 
+        private void numericUpDownRow_ValueChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }
