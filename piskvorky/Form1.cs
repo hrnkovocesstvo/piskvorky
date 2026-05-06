@@ -55,7 +55,7 @@ namespace piskvorky
         {
             Button btn = sender as Button;
             if (btn.Text == "") { btn.Text = player; Check(btn.Name); turn(); }
-            if (popopo == (int)numericUpDownWin.Value) Console.WriteLine("winiwnwinwinwinwinwinwinwniwninwinwinwinwiniwnwiniwniwinwiiwniwninwinwinw");
+            if (popopo == (int)numericUpDownWin.Value) Console.WriteLine("win");
             
         }
         private void buttonStart_Click(object sender, EventArgs e)
