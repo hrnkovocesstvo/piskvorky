@@ -8,7 +8,7 @@ namespace piskvorky
     {
         private Button[,] buttonArray;
         private string player = "X";
-        private bool gameOver = false;
+        private bool Konec = false;
 
         public Form1()
         {
@@ -17,15 +17,15 @@ namespace piskvorky
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            StartNewGame();
+            StartZnova();
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            StartNewGame();
+            StartZnova();
         }
 
-        private void StartNewGame()
+        private void StartZnova()
         {
             if (buttonArray != null)
             {
@@ -34,14 +34,14 @@ namespace piskvorky
             }
 
             player = "X";
-            gameOver = false;
+            Konec = false;
             textBoxWin.Text = "";
 
             int size = (int)numericUpDownRow.Value;
-            CreateGrid(size, size);
+            DelejTlacitka(size, size);
         }
 
-        private void CreateGrid(int cols, int rows)
+        private void DelejTlacitka(int cols, int rows)
         {
             const int btnSize = 50;
             const int startX = 50;
@@ -66,7 +66,7 @@ namespace piskvorky
         }
         private void button_Click(object sender, EventArgs e)
         {
-            if (gameOver) return;
+            if (Konec) return;
 
             Button btn = (Button)sender;
             if (btn.Text != "") return;          
@@ -77,10 +77,10 @@ namespace piskvorky
             int x = int.Parse(parts[1]);
             int y = int.Parse(parts[2]);
 
-            if (CheckWin(x, y))
+            if (WinKontrola(x, y))
             {
                 Win(player);
-                gameOver = true;
+                Konec = true;
                 return;
             }
 
@@ -92,20 +92,20 @@ namespace piskvorky
             if (draw)
             {
                 Win("JSTE RETARDI HOLT");
-                gameOver = true;
+                Konec = true;
                 return;
             }
 
-            SwitchPlayer();
+            HracZmena();
         }
 
-        private void SwitchPlayer()
+        private void HracZmena()
         {
             player = (player == "X") ? "O" : "X";
         }
 
 
-        private static readonly int[,] Axes =
+        private int[,] Smery =
         {
             {  1,  0 },   // horizontal
             {  0,  1 },   // vertical
@@ -113,7 +113,7 @@ namespace piskvorky
             {  1, -1 },   // diagonal  ↗
         };
 
-        private int CountInDirection(int x, int y, int dx, int dy)
+        private int PociPoci(int x, int y, int dx, int dy)
         {
             int count = 0;
             int nx = x + dx;
@@ -135,18 +135,18 @@ namespace piskvorky
             return count;
         }
 
-        private bool CheckWin(int x, int y)
+        private bool WinKontrola(int x, int y)
         {
             int winLength = (int)numericUpDownWin.Value;
 
-            for (int i = 0; i < Axes.GetLength(0); i++)
+            for (int i = 0; i < Smery.GetLength(0); i++)
             {
-                int dx = Axes[i, 0];
-                int dy = Axes[i, 1];
+                int dx = Smery[i, 0];
+                int dy = Smery[i, 1];
 
                 int lineLength = 1
-                    + CountInDirection(x, y, dx, dy)
-                    + CountInDirection(x, y, -dx, -dy);
+                    + PociPoci(x, y, dx, dy)
+                    + PociPoci(x, y, -dx, -dy);
 
                 if (lineLength >= winLength)
                     return true;
@@ -155,10 +155,10 @@ namespace piskvorky
             return false;
         }
 
-        private void Win(string winner)
+        private void Win(string vitez)
         {
-            if (winner == "JSTE RETARDI HOLT") textBoxWin.Text = "remiza :(";
-            else textBoxWin.Text = $"Vyhrál: { winner}";
+            if (vitez == "JSTE RETARDI HOLT") textBoxWin.Text = "remiza :(";
+            else textBoxWin.Text = $"Vyhrál: { vitez}";
         }
 
         private void numericUpDownRow_ValueChanged(object sender, EventArgs e) { }
