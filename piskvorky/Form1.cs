@@ -1,122 +1,166 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlTypes;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace piskvorky
 {
     public partial class Form1 : Form
     {
+        private Button[,] buttonArray;
+        private string player = "X";
+        private bool Konec = false;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-
-        private Button[,] buttonArray;
-
-        public void Delej(int x_tar, int y_tar)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            int aawidth = 50;
-            int aaheight = aawidth;
-            int aastartx = 50;
-            int aastarty = 50;
-            buttonArray = new Button[x_tar, y_tar];
+            StartZnova();
+        }
 
-            for (int x = 0; x < x_tar; x++)
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            StartZnova();
+        }
+
+        private void StartZnova()
+        {
+            if (buttonArray != null)
             {
-                for (int y = 0; y < y_tar; y++)
+                foreach (Button btn in buttonArray)
+                    this.Controls.Remove(btn);
+            }
+
+            player = "X";
+            Konec = false;
+            textBoxWin.Text = "";
+
+            int size = (int)numericUpDownRow.Value;
+            DelejTlacitka(size, size);
+        }
+
+        private void DelejTlacitka(int cols, int rows)
+        {
+            const int btnSize = 50;
+            const int startX = 50;
+            const int startY = 50;
+
+            buttonArray = new Button[cols, rows];
+
+            for (int x = 0; x < cols; x++)
+            {
+                for (int y = 0; y < rows; y++)
                 {
-                    buttonArray[x,y] = new Button();
-                    buttonArray[x,y].Name = $"btn_{x}_{y}";
-                    buttonArray[x,y].Size = new Size(aawidth, aaheight); 
-                    buttonArray[x,y].Location = new Point(aastartx+(aawidth*x), aastarty + (aaheight * y));
-                    buttonArray[x,y].Click += new System.EventHandler(button_Click); this.Controls.Add(buttonArray[x,y]);
+                    Button btn = new Button();
+                    btn.Name = $"btn_{x}_{y}";
+                    btn.Size = new Size(btnSize, btnSize);
+                    btn.Location = new Point(startX + btnSize * x, startY + btnSize * y);
+                    btn.Click += button_Click;
+
+                    this.Controls.Add(btn);
+                    buttonArray[x, y] = btn;
                 }
             }
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Delej((int)numericUpDownRow.Value, (int)numericUpDownRow.Value);
-        }
-
-        public string player = "X";
-        
-        public void turn() { if (player == "X") player = "O";else if (player == "O") player = "X"; }
-
         private void button_Click(object sender, EventArgs e)
         {
-            Button btn = sender as Button;
-            if (btn.Text == "") { btn.Text = player; Check(btn.Name); turn(); }
-            if (popopo == (int)numericUpDownWin.Value) Console.WriteLine("winiwnwinwinwinwinwinwinwniwninwinwinwinwiniwnwiniwniwinwiiwniwninwinwinw");
-            
-        }
-        private void buttonStart_Click(object sender, EventArgs e)
-        {
+            if (Konec) return;
 
-            Delej((int)numericUpDownRow.Value, (int)numericUpDownRow.Value);
-            Console.WriteLine("done");
-        }
-        int[,] moves = {
-                                { 1,  0 }, // 0 right
-                                { -1,  0 }, // 1 left
-                                {  0, 1 }, // 2 up
-                                {  0, -1 }, // 3 down
-                                { 1, 1 }, // 4 diagonal up-right
-                                { -1, 1 }, // 5 diagonal up-left
-                                { 1, -1 }, // 6 diagonal down-right
-                                { -1, -1 }  // 7 diagonal down-left
-                            };
-        int popopo = 0;
-        public void Check_Simple(int smer, int x, int y)
-        {
-            Console.WriteLine(popopo);
-            int new_x = x + (int)moves[smer, 0];
-            int new_y = y + (int)moves[smer, 1];
-            if (new_x < 0 || new_y < 0 || new_x > buttonArray.GetLength(0)-1 || new_y > buttonArray.GetLength(1)-1) return;
-            if (buttonArray[new_x, new_y].Text == player) popopo += 1; Check_Simple(smer, new_x, new_y);
+            Button btn = (Button)sender;
+            if (btn.Text != "") return;          
 
-        }
-        private void Check(string name)
-        {
-            popopo = 0;
-            string[] namee = name.Split('_');
-            int X = Convert.ToInt32(namee[1]);
-            int Y = Convert.ToInt32(namee[2]);
+            btn.Text = player;
 
-            
-            Console.WriteLine($"pocatek {X} {Y}");
-            
-            for (int i = 0; i < moves.GetLength(0); i++)
+            string[] parts = btn.Name.Split('_');
+            int x = int.Parse(parts[1]);
+            int y = int.Parse(parts[2]);
+
+            if (WinKontrola(x, y))
             {
-                int x_x = X;
-                int y_y = Y;
-                x_x += (int)moves[i, 0];
-                y_y += (int)moves[i, 1];
-                if (x_x > buttonArray.GetLength(0)-1 || x_x < 0) continue;
-                if (y_y > buttonArray.GetLength(1)-1 || y_y < 0) continue;
-                Console.WriteLine($"{i}: {(int)moves[i, 0]} {(int)moves[i, 1]}; {x_x} {y_y}");
-
-                if (buttonArray[x_x, y_y].Text == player) { popopo += 1; Check_Simple(i, x_x, y_y) ; Console.WriteLine($"nalezeno: {i}"); };
-                                            //ijbsdcjkbsdklbjhsdajhbsdcjhsdcbjhsdabjh
-                
-                
+                Win(player);
+                Konec = true;
+                return;
             }
-        
 
+            bool draw = true;
+            foreach (Button b in buttonArray)
+            {
+                if (b.Text == "") { draw = false; break; }
+            }
+            if (draw)
+            {
+                Win("JSTE RETARDI HOLT");
+                Konec = true;
+                return;
+            }
+
+            HracZmena();
         }
 
-
-        private void numericUpDownRow_ValueChanged(object sender, EventArgs e)
+        private void HracZmena()
         {
-
+            player = (player == "X") ? "O" : "X";
         }
+
+
+        private int[,] Smery =
+        {
+            {  1,  0 },   // horizontal
+            {  0,  1 },   // vertical
+            {  1,  1 },   // diagonal  ↘
+            {  1, -1 },   // diagonal  ↗
+        };
+
+        private int PociPoci(int x, int y, int dx, int dy)
+        {
+            int count = 0;
+            int nx = x + dx;
+            int ny = y + dy;
+
+            while (nx >= 0 && ny >= 0 &&
+                   nx < buttonArray.GetLength(0) &&
+                   ny < buttonArray.GetLength(1))
+            {
+                if (buttonArray[nx, ny].Text == player)
+                {
+                    count++;
+                    nx += dx;
+                    ny += dy;
+                }
+                else break;
+            }
+
+            return count;
+        }
+
+        private bool WinKontrola(int x, int y)
+        {
+            int winLength = (int)numericUpDownWin.Value;
+
+            for (int i = 0; i < Smery.GetLength(0); i++)
+            {
+                int dx = Smery[i, 0];
+                int dy = Smery[i, 1];
+
+                int lineLength = 1
+                    + PociPoci(x, y, dx, dy)
+                    + PociPoci(x, y, -dx, -dy);
+
+                if (lineLength >= winLength)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void Win(string vitez)
+        {
+            if (vitez == "JSTE RETARDI HOLT") textBoxWin.Text = "remiza :(";
+            else textBoxWin.Text = $"Vyhrál: { vitez}";
+        }
+
+        private void numericUpDownRow_ValueChanged(object sender, EventArgs e) { }
     }
 }
