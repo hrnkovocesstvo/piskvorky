@@ -43,7 +43,7 @@
             this.numericUpDownRow.Size = new System.Drawing.Size(120, 20);
             this.numericUpDownRow.TabIndex = 0;
             this.numericUpDownRow.Value = new decimal(new int[] {
-            2,
+            8,
             0,
             0,
             0});
@@ -55,6 +55,11 @@
             this.numericUpDownWin.Name = "numericUpDownWin";
             this.numericUpDownWin.Size = new System.Drawing.Size(120, 20);
             this.numericUpDownWin.TabIndex = 1;
+            this.numericUpDownWin.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             // 
             // buttonStart
             // 
