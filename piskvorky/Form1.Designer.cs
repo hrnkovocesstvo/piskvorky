@@ -31,6 +31,7 @@
             this.numericUpDownRow = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownWin = new System.Windows.Forms.NumericUpDown();
             this.buttonStart = new System.Windows.Forms.Button();
+            this.textBoxWin = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWin)).BeginInit();
             this.SuspendLayout();
@@ -65,11 +66,22 @@
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
+            // textBoxWin
+            // 
+            this.textBoxWin.AutoSize = true;
+            this.textBoxWin.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxWin.Location = new System.Drawing.Point(513, 12);
+            this.textBoxWin.Name = "textBoxWin";
+            this.textBoxWin.Size = new System.Drawing.Size(109, 39);
+            this.textBoxWin.TabIndex = 3;
+            this.textBoxWin.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBoxWin);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.numericUpDownWin);
             this.Controls.Add(this.numericUpDownRow);
@@ -79,6 +91,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWin)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -87,6 +100,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDownRow;
         private System.Windows.Forms.NumericUpDown numericUpDownWin;
         private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.Label textBoxWin;
     }
 }
 
