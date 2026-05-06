@@ -91,7 +91,7 @@ namespace piskvorky
             }
             if (draw)
             {
-                MessageBox.Show("It's a draw!", "Draw", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Win("JSTE RETARDI HOLT");
                 gameOver = true;
                 return;
             }
@@ -157,7 +157,8 @@ namespace piskvorky
 
         private void Win(string winner)
         {
-            textBoxWin.Text = $"Vyhrál: { winner}";
+            if (winner == "JSTE RETARDI HOLT") textBoxWin.Text = "remiza :(";
+            else textBoxWin.Text = $"Vyhrál: { winner}";
         }
 
         private void numericUpDownRow_ValueChanged(object sender, EventArgs e) { }
